@@ -1,0 +1,40 @@
+<template>
+
+
+
+<div class="tree" :style>
+
+
+
+</template>
+<script lang="coffee">
+
+random = require "random"
+timeout = require "timeout"
+
+
+module.exports = 
+    data:
+        state: 0
+        
+    props:
+        position: Position
+        options: Object
+        at: Function
+        nbTrees: Number
+        
+    ignite: ->
+        {p, trees} = @options
+        rdm = random.below p
+        isTree = @state is 0
+        max = @nbTrees < trees
+        if rdm and isTree and max
+            @state = 1
+            @notify {@position, @state}
+            timeout (random.ab 80, 120)*timeScale, =>
+                @position.neighboors.each (pos) ->
+                    @at(pos).ignite()
+
+
+
+</script>
